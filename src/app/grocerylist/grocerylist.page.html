@@ -12,7 +12,7 @@
             <ion-icon name="add"></ion-icon>
         </ion-fab-button>
     </ion-fab>
-    <ion-list>
+    <ion-list #lista>
         <ion-item-sliding *ngFor="let item of items; let i = index">
             <ion-item>
                 <div>
@@ -21,6 +21,9 @@
                 </div>
             </ion-item>
             <ion-item-options side="end">
+                <ion-item-option (click)="editItem(item, i)" color="primary">
+                    <ion-icon slot="icon-only" name="create"></ion-icon>
+                </ion-item-option>
                 <ion-item-option (click)="removeItem(item, i)" color="danger">
                     <ion-icon slot="icon-only" name="trash"></ion-icon>
                 </ion-item-option>

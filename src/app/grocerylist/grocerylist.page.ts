@@ -1,5 +1,5 @@
-import {Component} from '@angular/core';
-import {AlertController, ToastController} from '@ionic/angular';
+import {Component, ViewChild} from '@angular/core';
+import {AlertController, IonList, ToastController} from '@ionic/angular';
 
 @Component({
     selector: 'app-grocieries',
@@ -8,6 +8,7 @@ import {AlertController, ToastController} from '@ionic/angular';
 })
 export class GrocerylistPage {
 
+    @ViewChild('lista') lista: IonList;
     title = 'Grocery List';
     items = [
         {name: 'Milk', qty: 2},
@@ -15,12 +16,24 @@ export class GrocerylistPage {
         {name: 'Eggs', qty: 3},
     ];
 
+
     constructor(private toastController: ToastController, public alertController: AlertController) {
     }
 
 
     addItem(itemName, quantity) {
         this.items.push({qty: quantity, name: itemName});
+    }
+
+    updateItem(selectedItem, itemName, quantity) {
+        this.items[selectedItem].name = itemName;
+        this.items[selectedItem].qty = quantity;
+    }
+
+    editItem(item, index) {
+        console.log('Editing ', item);
+        this.presentEditGroceryItemPrompt(item, index)
+            .then(() => this.lista.closeSlidingItems());
     }
 
     removeItem(item, index) {
@@ -63,10 +76,49 @@ export class GrocerylistPage {
                         console.log('Confirm Cancel');
                     }
                 }, {
-                    text: 'Ok',
+                    text: 'Add',
                     handler: (data) => {
                         console.log('Confirm Ok');
                         this.addItem(data.itemName, data.quantity);
+                    }
+                }
+            ]
+        });
+
+        await alert.present();
+    }
+
+    async presentEditGroceryItemPrompt(item, index) {
+        const alert = await this.alertController.create({
+            header: 'Edit Grocery Item!',
+            inputs: [
+                {
+                    name: 'itemName',
+                    type: 'text',
+                    placeholder: 'Name',
+                    value: item.name
+                },
+                {
+                    name: 'quantity',
+                    type: 'number',
+                    placeholder: 'Quantity',
+                    min: 0,
+                    value: item.qty
+                }
+            ],
+            buttons: [
+                {
+                    text: 'Cancel',
+                    role: 'cancel',
+                    cssClass: 'secondary',
+                    handler: () => {
+                        console.log('Confirm Cancel');
+                    }
+                }, {
+                    text: 'Save',
+                    handler: (data) => {
+                        console.log('Confirm Ok');
+                        this.updateItem(index, data.itemName, data.quantity);
                     }
                 }
             ]
