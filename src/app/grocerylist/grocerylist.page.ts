@@ -1,5 +1,6 @@
 import {Component, ViewChild} from '@angular/core';
 import {AlertController, IonList, ToastController} from '@ionic/angular';
+import {GroceriesService} from '../../services/groceries.service';
 
 @Component({
     selector: 'app-grocieries',
@@ -10,36 +11,31 @@ export class GrocerylistPage {
 
     @ViewChild('lista') lista: IonList;
     title = 'Grocery List';
-    items = [
-        {name: 'Milk', qty: 2},
-        {name: 'Bread', qty: 1},
-        {name: 'Eggs', qty: 3},
-    ];
 
-
-    constructor(private toastController: ToastController, public alertController: AlertController) {
+    constructor(private toastController: ToastController, public alertController: AlertController,
+                public groceriesService: GroceriesService) {
     }
 
+/*  CRUD OPERATIONS */
+
+    loadItems() {
+        return this.groceriesService.getItems();
+    }
 
     addItem(itemName, quantity) {
-        this.items.push({qty: quantity, name: itemName});
+        console.log('Adding ', itemName);
+        this.groceriesService.addItem(itemName, quantity);
     }
 
-    updateItem(selectedItem, itemName, quantity) {
-        this.items[selectedItem].name = itemName;
-        this.items[selectedItem].qty = quantity;
-    }
-
-    editItem(item, index) {
-        console.log('Editing ', item);
-        this.presentEditGroceryItemPrompt(item, index)
-            .then(() => this.lista.closeSlidingItems());
+    updateItem(index, itemName, quantity) {
+        console.log('Updating ', itemName);
+        this.groceriesService.updateItem(index, {name: itemName, qty: quantity});
     }
 
     removeItem(item, index) {
         console.log('Removing ', item);
-        this.items.splice(index, 1);
         this.presentToast('Removing item: ' + item.name + ' .... ');
+        this.groceriesService.remoteItem(index);
     }
 
     async presentToast(msg) {
@@ -85,7 +81,7 @@ export class GrocerylistPage {
             ]
         });
 
-        await alert.present();
+        await alert.present().then(() => this.lista.closeSlidingItems());
     }
 
     async presentEditGroceryItemPrompt(item, index) {

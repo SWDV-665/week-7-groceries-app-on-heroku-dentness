@@ -12,8 +12,11 @@
             <ion-icon name="add"></ion-icon>
         </ion-fab-button>
     </ion-fab>
+
+    <h3 text-center *ngIf="loadItems().length == 0">No items in your list.</h3>
+
     <ion-list #lista>
-        <ion-item-sliding *ngFor="let item of items; let i = index">
+        <ion-item-sliding *ngFor="let item of loadItems(); let i = index">
             <ion-item>
                 <div>
                     <h2>{{item.name}}</h2>
@@ -21,7 +24,7 @@
                 </div>
             </ion-item>
             <ion-item-options side="end">
-                <ion-item-option (click)="editItem(item, i)" color="primary">
+                <ion-item-option (click)="presentEditGroceryItemPrompt(item, i)" color="primary">
                     <ion-icon slot="icon-only" name="create"></ion-icon>
                 </ion-item-option>
                 <ion-item-option (click)="removeItem(item, i)" color="danger">
