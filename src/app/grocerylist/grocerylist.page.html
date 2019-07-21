@@ -7,7 +7,7 @@
 </ion-header>
 
 <ion-content padding>
-    <ion-fab (click)="presentAddGroceryItemPrompt()" vertical="top" horizontal="end" edge="true" slot="fixed">
+    <ion-fab (click)="addItem()" vertical="top" horizontal="end" edge="true" slot="fixed">
         <ion-fab-button>
             <ion-icon name="add"></ion-icon>
         </ion-fab-button>
@@ -24,7 +24,7 @@
                 </div>
             </ion-item>
             <ion-item-options side="end">
-                <ion-item-option (click)="presentEditGroceryItemPrompt(item, i)" color="primary">
+                <ion-item-option (click)="editItem(item, i)" color="primary">
                     <ion-icon slot="icon-only" name="create"></ion-icon>
                 </ion-item-option>
                 <ion-item-option (click)="removeItem(item, i)" color="danger">

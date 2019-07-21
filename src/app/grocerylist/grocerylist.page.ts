@@ -16,20 +16,20 @@ export class GrocerylistPage {
                 public groceriesService: GroceriesService) {
     }
 
-/*  CRUD OPERATIONS */
-
+    /* UI Operations */
     loadItems() {
         return this.groceriesService.getItems();
     }
 
-    addItem(itemName, quantity) {
-        console.log('Adding ', itemName);
-        this.groceriesService.addItem(itemName, quantity);
+    addItem() {
+        console.log('Adding new item');
+        this.presentAddGroceryItemPrompt();
     }
 
-    updateItem(index, itemName, quantity) {
-        console.log('Updating ', itemName);
-        this.groceriesService.updateItem(index, {name: itemName, qty: quantity});
+    editItem(item, index) {
+        console.log('Editing ', item);
+        this.presentEditGroceryItemPrompt(item, index);
+
     }
 
     removeItem(item, index) {
@@ -75,7 +75,7 @@ export class GrocerylistPage {
                     text: 'Add',
                     handler: (data) => {
                         console.log('Confirm Ok');
-                        this.addItem(data.itemName, data.quantity);
+                        this.groceriesService.addItem(data.itemName, data.quantity);
                     }
                 }
             ]
@@ -114,13 +114,13 @@ export class GrocerylistPage {
                     text: 'Save',
                     handler: (data) => {
                         console.log('Confirm Ok');
-                        this.updateItem(index, data.itemName, data.quantity);
+                        this.groceriesService.updateItem(index, {name: data.itemName, qty: data.quantity});
                     }
                 }
             ]
         });
 
-        await alert.present();
+        await alert.present().then(() => this.lista.closeSlidingItems());
     }
 
 }
