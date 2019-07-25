@@ -1,6 +1,7 @@
 import {Component, ViewChild} from '@angular/core';
 import {AlertController, IonList, ToastController} from '@ionic/angular';
 import {GroceriesService} from '../../services/groceries.service';
+import {InputDialogService} from '../../services/input-dialog.service';
 
 @Component({
     selector: 'app-grocieries',
@@ -9,11 +10,10 @@ import {GroceriesService} from '../../services/groceries.service';
 })
 export class GrocerylistPage {
 
-    @ViewChild('lista') lista: IonList;
     title = 'Grocery List';
 
-    constructor(private toastController: ToastController, public alertController: AlertController,
-                public groceriesService: GroceriesService) {
+    constructor(private toastController: ToastController,
+                public groceriesService: GroceriesService, public inputDialogServices: InputDialogService) {
     }
 
     /* UI Operations */
@@ -23,12 +23,12 @@ export class GrocerylistPage {
 
     addItem() {
         console.log('Adding new item');
-        this.presentAddGroceryItemPrompt();
+        this.inputDialogServices.presentGroceryItemPrompt();
     }
 
     editItem(item, index) {
         console.log('Editing ', item);
-        this.presentEditGroceryItemPrompt(item, index);
+        this.inputDialogServices.presentGroceryItemPrompt(item, index);
 
     }
 
@@ -46,81 +46,4 @@ export class GrocerylistPage {
         });
         toast.present();
     }
-
-    async presentAddGroceryItemPrompt() {
-        const alert = await this.alertController.create({
-            header: 'Add Grocery Item!',
-            inputs: [
-                {
-                    name: 'itemName',
-                    type: 'text',
-                    placeholder: 'Name'
-                },
-                {
-                    name: 'quantity',
-                    type: 'number',
-                    placeholder: 'Quantity',
-                    min: 0
-                }
-            ],
-            buttons: [
-                {
-                    text: 'Cancel',
-                    role: 'cancel',
-                    cssClass: 'secondary',
-                    handler: () => {
-                        console.log('Confirm Cancel');
-                    }
-                }, {
-                    text: 'Add',
-                    handler: (data) => {
-                        console.log('Confirm Ok');
-                        this.groceriesService.addItem(data.itemName, data.quantity);
-                    }
-                }
-            ]
-        });
-
-        await alert.present().then(() => this.lista.closeSlidingItems());
-    }
-
-    async presentEditGroceryItemPrompt(item, index) {
-        const alert = await this.alertController.create({
-            header: 'Edit Grocery Item!',
-            inputs: [
-                {
-                    name: 'itemName',
-                    type: 'text',
-                    placeholder: 'Name',
-                    value: item.name
-                },
-                {
-                    name: 'quantity',
-                    type: 'number',
-                    placeholder: 'Quantity',
-                    min: 0,
-                    value: item.qty
-                }
-            ],
-            buttons: [
-                {
-                    text: 'Cancel',
-                    role: 'cancel',
-                    cssClass: 'secondary',
-                    handler: () => {
-                        console.log('Confirm Cancel');
-                    }
-                }, {
-                    text: 'Save',
-                    handler: (data) => {
-                        console.log('Confirm Ok');
-                        this.groceriesService.updateItem(index, {name: data.itemName, qty: data.quantity});
-                    }
-                }
-            ]
-        });
-
-        await alert.present().then(() => this.lista.closeSlidingItems());
-    }
-
 }
