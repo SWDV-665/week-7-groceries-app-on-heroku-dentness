@@ -7,12 +7,9 @@ import {GroceriesService} from './groceries.service';
 })
 export class InputDialogService {
 
-    @ViewChild('lista') lista: IonList;
-
     constructor(public alertController: AlertController,
                 public groceriesService: GroceriesService) {
     }
-
 
     async presentGroceryItemPrompt(item?, index?) {
         const alert = await this.alertController.create({
@@ -54,7 +51,7 @@ export class InputDialogService {
             ]
         });
 
-        await alert.present().then(() => this.lista.closeSlidingItems());
+        await alert.present();
     }
 
 }

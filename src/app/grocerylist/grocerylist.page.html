@@ -15,7 +15,7 @@
 
     <h3 text-center *ngIf="loadItems().length == 0">No items in your list.</h3>
 
-    <ion-list #lista>
+    <ion-list>
         <ion-item-sliding *ngFor="let item of loadItems(); let i = index">
             <ion-item>
                 <div>
@@ -26,6 +26,9 @@
             <ion-item-options side="end">
                 <ion-item-option (click)="editItem(item, i)" color="primary">
                     <ion-icon slot="icon-only" name="create"></ion-icon>
+                </ion-item-option>
+                <ion-item-option (click)="shareItem(item)" color="light">
+                    <ion-icon slot="icon-only" name="share"></ion-icon>
                 </ion-item-option>
                 <ion-item-option (click)="removeItem(item, i)" color="danger">
                     <ion-icon slot="icon-only" name="trash"></ion-icon>
