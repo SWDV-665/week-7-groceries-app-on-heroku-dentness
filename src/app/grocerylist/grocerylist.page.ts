@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {IonItemSliding, ToastController} from '@ionic/angular';
+import {ToastController} from '@ionic/angular';
 import {GroceriesService} from '../../services/groceries.service';
 import {InputDialogService} from '../../services/input-dialog.service';
 import {SocialSharing} from '@ionic-native/social-sharing/ngx';
@@ -13,16 +13,30 @@ import {SocialSharing} from '@ionic-native/social-sharing/ngx';
 export class GrocerylistPage {
 
     title = 'Grocery List';
+    items: object = [];
+    errorMessage: string;
+
 
     constructor(private toastController: ToastController,
                 public groceriesService: GroceriesService,
                 public inputDialogServices: InputDialogService,
                 private socialSharing: SocialSharing) {
+        groceriesService.dataChanged$.subscribe((dataChanged: boolean) => {
+            this.loadItems();
+        });
+    }
+
+    ionViewDidLoad() {
+        this.loadItems();
     }
 
     /* UI Operations */
+
     loadItems() {
-        return this.groceriesService.getItems();
+        this.groceriesService.getItems().subscribe(
+            items => this.items = items,
+            error => this.errorMessage = error as any
+        );
     }
 
     addItem() {
@@ -51,7 +65,7 @@ export class GrocerylistPage {
     removeItem(item, index) {
         console.log('Removing ', item);
         this.presentToast('Removing item: ' + item.name + ' .... ');
-        this.groceriesService.remoteItem(index);
+        this.groceriesService.removeItem(index);
     }
 
     async presentToast(msg) {
