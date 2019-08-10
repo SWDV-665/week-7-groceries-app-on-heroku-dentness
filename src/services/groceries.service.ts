@@ -10,26 +10,19 @@ export class GroceriesService {
 
 
     dataChanged$: Observable<boolean>;
-    private dataChangedSubject: Subject<boolean>;
+    private dataChangeSubject: Subject<boolean>;
 
     baseUrl = 'http://localhost:8080/api';
-    items: any = [];
 
     constructor(public http: HttpClient) {
-        this.dataChangedSubject = new Subject<boolean>();
-        this.dataChanged$ = this.dataChangedSubject.asObservable();
+        this.dataChangeSubject = new Subject<boolean>();
+        this.dataChanged$ = this.dataChangeSubject.asObservable();
     }
 
     getItems(): Observable<object[]> {
         return this.http.get<object[]>(this.baseUrl + '/groceries').pipe(
-            map(this.extractData),
             catchError(this.handleError)
         );
-    }
-
-    private extractData(res: Response) {
-        let body = res;
-        return body || {};
     }
 
     private handleError(error: Response | any) {
@@ -44,15 +37,23 @@ export class GroceriesService {
         return Observable.throw(errMsg);
     }
 
-    removeItem(index) {
-        this.items.splice(index, 1);
+    removeItem(item) {
+        this.http.delete(this.baseUrl + '/groceries/' + item._id).subscribe(res => {
+            this.dataChangeSubject.next(true);
+        });
+
     }
 
-    updateItem(index, newItem) {
-        this.items[index] = newItem;
+    updateItem(id, newItem) {
+        this.http.put(this.baseUrl + '/groceries/' + id, {name: newItem.name, qty: newItem.qty}).subscribe(res => {
+            this.dataChangeSubject.next(true);
+        });
     }
 
     addItem(itemName, quantity) {
-        this.items.push({qty: quantity, name: itemName});
+
+        this.http.post(this.baseUrl + '/groceries', {name: itemName, qty: quantity}).subscribe(res => {
+            this.dataChangeSubject.next(true);
+        });
     }
 }

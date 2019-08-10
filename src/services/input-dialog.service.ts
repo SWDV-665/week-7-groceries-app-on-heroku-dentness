@@ -42,7 +42,7 @@ export class InputDialogService {
                     handler: (data) => {
                         console.log('Confirm Ok');
                         if (index !== undefined) {
-                            this.groceriesService.updateItem(index, {name: data.itemName, qty: data.quantity});
+                            this.groceriesService.updateItem(item._id, {name: data.itemName, qty: data.quantity});
                         } else {
                             this.groceriesService.addItem(data.itemName, data.quantity);
                         }

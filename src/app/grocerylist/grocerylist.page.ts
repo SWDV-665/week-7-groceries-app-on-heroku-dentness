@@ -1,9 +1,8 @@
 import {Component} from '@angular/core';
-import {ToastController} from '@ionic/angular';
+import {NavController, ToastController} from '@ionic/angular';
 import {GroceriesService} from '../../services/groceries.service';
 import {InputDialogService} from '../../services/input-dialog.service';
 import {SocialSharing} from '@ionic-native/social-sharing/ngx';
-
 
 @Component({
     selector: 'app-grocieries',
@@ -12,20 +11,24 @@ import {SocialSharing} from '@ionic-native/social-sharing/ngx';
 })
 export class GrocerylistPage {
 
-    title = 'Grocery List';
-    items: object = [];
+    title = 'Grocery Listz';
+    items: object[] = [];
     errorMessage: string;
 
 
-    constructor(private toastController: ToastController,
+    constructor(
+                public navCtrl: NavController,
+                private toastController: ToastController,
                 public groceriesService: GroceriesService,
                 public inputDialogServices: InputDialogService,
                 private socialSharing: SocialSharing) {
         groceriesService.dataChanged$.subscribe((dataChanged: boolean) => {
             this.loadItems();
         });
+        this.loadItems();
     }
 
+    // TODO: Determine how this code is called.  Not being triggered.
     ionViewDidLoad() {
         this.loadItems();
     }
@@ -37,6 +40,7 @@ export class GrocerylistPage {
             items => this.items = items,
             error => this.errorMessage = error as any
         );
+        return this.items;
     }
 
     addItem() {
@@ -65,7 +69,7 @@ export class GrocerylistPage {
     removeItem(item, index) {
         console.log('Removing ', item);
         this.presentToast('Removing item: ' + item.name + ' .... ');
-        this.groceriesService.removeItem(index);
+        this.groceriesService.removeItem(item);
     }
 
     async presentToast(msg) {
