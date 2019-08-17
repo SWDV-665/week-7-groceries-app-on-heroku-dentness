@@ -12,7 +12,8 @@ export class GroceriesService {
     dataChanged$: Observable<boolean>;
     private dataChangeSubject: Subject<boolean>;
 
-    baseUrl = 'http://localhost:8080/api';
+    // baseUrl = 'http://localhost:8080/api';
+    baseUrl = 'https://grocery-server-dent.herokuapp.com/api';
 
     constructor(public http: HttpClient) {
         this.dataChangeSubject = new Subject<boolean>();
