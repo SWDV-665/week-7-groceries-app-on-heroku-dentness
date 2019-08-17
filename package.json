@@ -32,9 +32,7 @@
     "es6-promise-plugin": "^4.2.2",
     "rxjs": "~6.5.1",
     "tslib": "^1.9.0",
-    "zone.js": "~0.8.29"
-  },
-  "devDependencies": {
+    "zone.js": "~0.8.29",
     "@angular-devkit/architect": "~0.13.8",
     "@angular-devkit/build-angular": "~0.13.8",
     "@angular-devkit/core": "~7.3.8",
@@ -65,6 +63,9 @@
     "ts-node": "~8.3.0",
     "tslint": "~5.17.0",
     "typescript": "~3.1.6"
+  },
+  "devDependencies": {
+
   },
   "description": "An Ionic project",
   "cordova": {
