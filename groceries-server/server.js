@@ -121,5 +121,5 @@ app.delete('/api/groceries/:id', function (req, res) {
 
 
 // Start app and listen on port 8080  
-app.listen(process.env.PORT || 8080);
-console.log("Grocery server listening on port  - ", (process.env.PORT || 8080));
+app.listen(process.env.PORT || 80);
+console.log("Grocery server listening on port  - ", (process.env.PORT || 80));
